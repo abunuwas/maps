@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
+  </head>
+  <body>
+    <h3>My Google Maps Demo</h3>
+    <div id="map"></div>
+    <script>
+      var center = {{ center | safe }};
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: center
+        });
+        var markers = {{ markers | safe }};
+        for (var i=0, l=markers.length; i<l; i++) {
+          var pos = markers[i];
+          console.log(pos);
+          var marker = new google.maps.Marker({
+            position: pos,
+            map: map,
+            title: 'Hello, Venice!'
+          });
+        }
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCP8PAu-coD4jYXY8C_f3zOKsL-77Va1w4&callback=initMap">
+    </script>
+  </body>
+</html>
+
