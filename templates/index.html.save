@@ -12,9 +12,9 @@
     <h3>My Google Maps Demo</h3>
     <div id="map"></div>
     <script>
-      var center = {{ center | safe }};
-      var markers = {{ markers | safe }};
-    </script> 
+       var center = {{ center | safe }};
+       var markers = {{ markers | safe }};
+    </script>
     <script src="{{ url_for('static', filename='js/maps.js') }}"></script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCP8PAu-coD4jYXY8C_f3zOKsL-77Va1w4&callback=initMap">
