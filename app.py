@@ -25,7 +25,7 @@ def index():
 
 @app.route('/place/<string:name>')
 def place(name):
-    location = geocode.geocode(name)[0]['geometry']['location']
+    location = [geocode.geocode(name)[0]['geometry']['location']]
     return render_template('index.html', markers=location, center=location)
 
 
