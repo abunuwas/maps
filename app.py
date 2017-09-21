@@ -1,15 +1,15 @@
 import json
+import time
 
 from flask import Flask, render_template
 import googlemaps
-
 
 from config import geocode_api_key, places_api_key
 
 
 app = Flask(__name__)
 geocode = googlemaps.Client(geocode_api_key)
-places = p = googlemaps.Client(places_api_key)
+p = googlemaps.Client(places_api_key)
 
 
 @app.route('/')
@@ -27,8 +27,22 @@ def place(name):
 @app.route('/place/<string:name>/restaurants')
 def restaurants(name):
     location = geocode.geocode(name)[0]['geometry']['location']
-    outcome = p.places(location=location, query='restaurants')
-    locations = [l['geometry']['location'] for l in outcome['results']]
+    outcome = []
+    _outcome = p.places(location=location, query='restaurants')
+    outcome += _outcome['results']
+    while 'next_page_token' in _outcome:
+        time.sleep(1)
+        retry = True
+        while retry:
+            print('retrying...')
+            try:
+                _outcome = p.places(location=location, query='restaurants', page_token=_outcome['next_page_token'])
+            except googlemaps.exceptions.ApiError:
+                time.sleep(1)
+            else:
+                retry = False
+        outcome += _outcome['results']
+        locations = [l['geometry']['location'] for l in outcome['results']]
     return render_template('index.html', markers=locations, center=location)
 
 
